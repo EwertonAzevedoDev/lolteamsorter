@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+<html lang=”pt-br”>
+	<head>
+		<meta charset=”UTF-8”>
+		<link rel=”stylesheet” type=”text/css” href=”estilo.css”>
+		<title></title>
+	</head>
+	<body>
+		<label for="top">Topos</label>
+		<input type="text" id="top"> <button onClick="addPlayer('top')">Add</button>
+		<ul id="list-top"></ul>
+
+		<label for="selva">Caçadores</label>
+		<input type="text" id="selva"> <button onClick="addPlayer('selva')">Add</button>
+		<ul id="list-selva"></ul>
+
+		<label for="mid">Meios</label>
+		<input type="text" id="mid"> <button onClick="addPlayer('mid')">Add</button>
+		<ul id="list-mid"></ul>
+
+		<label for="suporte">Suportes</label>
+		<input type="text" id="suporte"> <button onClick="addPlayer('suporte')">Add</button>
+		<ul id="list-suporte"></ul>
+
+		<label for="adc">Atiradores</label>
+		<input type="text" id="adc"> <button onClick="addPlayer('adc')">Add</button>
+		<ul id="list-adc"></ul>
+
+		<label for="qtd">Numero de times</label>
+		<input type="number" id="qtd"> <button onClick="sortTeams()">Sortear</button>
+
+		<div id='error'></div>
+
+		<div id='times-div'></div>
+		
+
+	<script type="text/javascript">
+		const players = {}
+		players.tops = []
+		players.junglers = []
+		players.middles = []
+		players.adcs = []
+		players.sups = []
+		let qtdTeams = 0
+		let teams = []
+		function addPlayer(lane){
+			let playerName = document.getElementById(lane).value
+			if(lane == 'top'){
+				players.tops.push(playerName)
+			}else if(lane == 'selva'){
+				players.junglers.push(playerName)
+			}else if(lane == 'mid'){
+				players.middles.push(playerName)
+			}else if(lane == 'suporte'){
+				players.sups.push(playerName)
+			}else{
+				players.adcs.push(playerName)
+			}
+			
+			gerar('list-'+lane, playerName)
+			document.getElementById(lane).value = ''
+			
+		}
+		function gerar(lista, player){
+			listaUl = document.getElementById(lista)
+			let item = document.createElement('li');
+        	item.appendChild(document.createTextNode(player));
+        	listaUl.appendChild(item);
+        	console.log(players)
+		}
+
+		function sortTeams(){
+			console.log('Entrou em sortTeams')
+			let erro = false
+			qtdTeams = document.getElementById('qtd').value
+			document.getElementById('error').innerHTML = ''
+			document.getElementById('times-div').innerHTML = ''
+			if(qtdTeams <= 0){
+				document.getElementById('error').innerHTML = 'Ô Jumento, você tem que querer montar pelo menos 1 time né!?'
+				erro = true
+				return false
+			}
+			if(!erro){
+				Object.keys(players).forEach((key) => {
+					console.log('Entrou no foreach para o elemento:' + key + ' quantidade de players: ' + players[key].length)
+					if(players[key].length < qtdTeams){
+						document.getElementById('error').innerHTML = 'Deixa de ser BURRO! se você quer ' + qtdTeams + ' time(s), então deve ter pelo menos ' + qtdTeams + ' players em cada rota.'
+						erro = true
+						return false
+					}
+					shuffle(players[key])
+					for (let i = 0; i < qtdTeams; i++) {					
+						if(Array.isArray(teams[i])){
+							
+						}else{
+							teams[i] = []						
+						}
+
+						if(key == 'tops'){
+							teams[i].top = players[key][i]
+						}else if(key == 'junglers'){
+							teams[i].jungler = players[key][i]
+						}else if(key == 'middles'){
+							teams[i].mid = players[key][i]
+						}else if(key == 'sups'){
+							teams[i].sup = players[key][i]
+						}else{
+							teams[i].adc = players[key][i]
+						}
+						
+					}
+				})
+			}
+			if(!erro){
+				console.log(teams)
+				showTeams()
+			}
+
+		}
+		function showTeams(){
+			contagem = 1
+			teams.forEach((time) => {
+				times = document.getElementById('times-div')
+				let item = document.createElement('div');				
+				item.innerHTML = '<h1>Time ' + contagem + '</h1>'
+				let lista = document.createElement('ul')
+				item.appendChild(lista)
+				Object.keys(time).forEach((player) => {		
+					let itemList = document.createElement('li')			
+					let laneName = ''
+					if(player == 'top'){
+						laneName = ' TOPO: '
+					}else if(player == 'jungler'){
+						laneName = ' SELVA: '
+					}else if(player == 'mid'){
+						laneName = ' MEIO: '
+					}else if(player == 'sup'){
+						laneName = ' SUPORTE: '
+					}else{
+						laneName = ' ATIRADOR: '
+					}
+					itemList.appendChild(document.createTextNode(laneName + time[player]));
+					lista.appendChild(itemList);
+				})	        	
+	        	times.appendChild(item);
+	        	contagem++
+			})
+		}
+
+		function shuffle(array) {
+		  var currentIndex = array.length,  randomIndex;
+
+		  // While there remain elements to shuffle...
+		  while (0 !== currentIndex) {
+
+		    // Pick a remaining element...
+		    randomIndex = Math.floor(Math.random() * currentIndex);
+		    currentIndex--;
+
+		    // And swap it with the current element.
+		    [array[currentIndex], array[randomIndex]] = [
+		      array[randomIndex], array[currentIndex]];
+		  }
+
+		  return array;
+		}
+	</script>
+	</body>
+</html>
