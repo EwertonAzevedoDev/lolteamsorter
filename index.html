@@ -1,39 +1,222 @@
 <!DOCTYPE HTML>
-<html lang=”pt-br”>
-	<head>
-		<meta charset=”UTF-8”>
-		<link rel=”stylesheet” type=”text/css” href=”estilo.css”>
-		<title></title>
-	</head>
-	<body>
-		<label for="top">Topos</label>
-		<input type="text" id="top"> <button onClick="addPlayer('top')">Add</button>
-		<ul id="list-top"></ul>
+<html lang="pt-br">
 
-		<label for="selva">Caçadores</label>
-		<input type="text" id="selva"> <button onClick="addPlayer('selva')">Add</button>
-		<ul id="list-selva"></ul>
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<title></title>
+</head>
 
-		<label for="mid">Meios</label>
-		<input type="text" id="mid"> <button onClick="addPlayer('mid')">Add</button>
-		<ul id="list-mid"></ul>
+<body>
+	<nav class="navbar navbar-dark bg-primary">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">
+				Lol Team Sorter
+			</a>
+		</div>
+	</nav>
+	<div class="container-fluid">
 
-		<label for="suporte">Suportes</label>
-		<input type="text" id="suporte"> <button onClick="addPlayer('suporte')">Add</button>
-		<ul id="list-suporte"></ul>
+		<div class="modal fade" id="primeiroPasso" aria-hidden="true" aria-labelledby="primeiroPassoLabel"
+			tabindex="-1">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="primeiroPassoLabel">Primeiro Passo</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">Insira o nome de cada player nas suas respectivas roles</li>
+							<li class="list-group-item">Insira um jogador por vez</li>
+							<li class="list-group-item"><img class="img-fluid" src="inserirjogador.png"></li>
+						</ul>
 
-		<label for="adc">Atiradores</label>
-		<input type="text" id="adc"> <button onClick="addPlayer('adc')">Add</button>
-		<ul id="list-adc"></ul>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-primary" data-bs-target="#segundoPasso" data-bs-toggle="modal"
+							data-bs-dismiss="modal">Próximo Passo</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
-		<label for="qtd">Numero de times</label>
-		<input type="number" id="qtd"> <button onClick="sortTeams()">Sortear</button>
+		<div class="modal fade" id="segundoPasso" aria-hidden="true" aria-labelledby="segundoPassoLabel" tabindex="-1">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="segundoPassoLabel">Segundo Passo</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">Insira a quantidade de equipes que deseja formar</li>
+							<li class="list-group-item">A quantidade de jogadores em cada role deve ser maior ou igual
+								ao numero de equipes</li>
+							<li class="list-group-item"><img class="img-fluid" src="qtdEquipes.png"></li>
+							<li class="list-group-item">Clique em Sortear</li>
+						</ul>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-dark" data-bs-target="#primeiroPasso" data-bs-toggle="modal"
+							data-bs-dismiss="modal">Passo Anterior</button>
+						<button class="btn btn-primary" data-bs-target="#terceiroPasso" data-bs-toggle="modal"
+							data-bs-dismiss="modal">Próximo Passo</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal fade" id="terceiroPasso" aria-hidden="true" aria-labelledby="terceiroPassoLabel"
+			tabindex="-1">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="terceiroPassoLabel">Último Passo</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">As equipes serão formadas aleatóriamente</li>
+							<li class="list-group-item">As equipes serão apresentadas na mesma página</li>
+							<li class="list-group-item"><img class="img-fluid" src="equipes.png"></li>
+						</ul>
+					</div>
+					<div class="modal-footer">
+						<button class="btn btn-dark" data-bs-target="#segundoPasso" data-bs-toggle="modal"
+							data-bs-dismiss="modal">Passo Anterior</button>
+						<button type="button" class="btn btn-success" data-bs-dismiss="modal"
+							aria-label="Close">Entendi</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<a class="btn btn-primary mt-4" data-bs-toggle="modal" href="#primeiroPasso" role="button">Como Utilizar o
+			Team Sorter</a>
+
+		<div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+			<div class="col">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Top</h5>
+						<div class="row g-2">
+							<div class="col-auto">
+								<input class="form-control" onkeypress="enterToAddPlayer(event,'top')" type="text"
+									id="top">
+							</div>
+							<div class="col-auto">
+								<button class="btn btn-primary" onClick="addPlayer('top')">+</button>
+							</div>
+						</div>
+						<ul class="list-group list-group-flush" id="list-top"></ul>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Jungle</h5>
+						<div class="row g-2">
+							<div class="col-auto">
+								<input class="form-control" onkeypress="enterToAddPlayer(event,'selva')" type="text"
+									id="selva">
+							</div>
+							<div class="col-auto">
+								<button class="btn btn-primary" onClick="addPlayer('selva')">+</button>
+							</div>
+						</div>
+						<ul class="list-group list-group-flush" id="list-selva"></ul>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Mid</h5>
+						<div class="row g-2">
+							<div class="col-auto">
+								<input class="form-control" onkeypress="enterToAddPlayer(event,'mid')" type="text"
+									id="mid">
+							</div>
+							<div class="col-auto">
+								<button class="btn btn-primary" onClick="addPlayer('mid')">+</button>
+							</div>
+						</div>
+						<ul class="list-group list-group-flush" id="list-mid"></ul>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Adc</h5>
+						<div class="row g-2">
+							<div class="col-auto">
+								<input class="form-control" onkeypress="enterToAddPlayer(event,'adc')" type="text"
+									id="adc">
+							</div>
+							<div class="col-auto">
+								<button class="btn btn-primary" onClick="addPlayer('adc')">+</button>
+							</div>
+						</div>
+						<ul class="list-group list-group-flush" id="list-adc"></ul>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Support</h5>
+						<div class="row g-2">
+							<div class="col-auto">
+								<input class="form-control" onkeypress="enterToAddPlayer(event,'suporte')" type="text"
+									id="suporte">
+							</div>
+							<div class="col-auto">
+								<button class="btn btn-primary" onClick="addPlayer('suporte')">+</button>
+							</div>
+						</div>
+						<ul class="list-group list-group-flush" id="list-suporte"></ul>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="card">
+					<div class="card-body">
+						<h5 class="card-title">Quantidade de Equipes</h5>
+						<div class="row g-2">
+							<div class="col-auto">
+								<input class="form-control" type="number" id="qtd">
+							</div>
+							<div class="col-auto">
+								<button class="btn btn-primary" onClick="sortTeams()">Sortear</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row row-cols-1 row-cols-md-4 g-4 mt-3" id='times-div'></div>
 
 		<div id='error'></div>
 
-		<div id='times-div'></div>
-		
-		<div>Desenvolvido por Ewerton Azevedo vulgo "O Not"</div>
+
+
+
+	</div>
+
+	<footer class="bg-dark text-center text-lg-start fixed-bottom">
+		<!-- Copyright -->
+		<div class="text-center p-3 text-light">
+			© 2021 Copyright:
+			<a class="text-light" href="https://ewertonazevedodev.github.io/">Ewerton Azevedo</a>
+		</div>
+		<!-- Copyright -->
+	</footer>
+
 	<script type="text/javascript">
 		const players = {}
 		players.tops = []
@@ -43,127 +226,169 @@
 		players.sups = []
 		let qtdTeams = 0
 		let teams = []
-		function addPlayer(lane){
+		function enterToAddPlayer(event, lane) {
+			let key = event.which || event.keyCode
+			if (key == 13) {
+				addPlayer(lane)
+			}
+		}
+		function addPlayer(lane) {
+			document.getElementById('error').innerHTML = ''
+			document.getElementById('error').classList.remove('class="alert')
+			document.getElementById('error').classList.remove('alert-danger')
 			let playerName = document.getElementById(lane).value
-			if(lane == 'top'){
+			if (playerName == '' || playerName == undefined || playerName == null) {
+				document.getElementById('error').innerHTML = 'Tá achando que tem algum adivinha aqui? Não insira jogadores sem Nome!'
+				document.getElementById('error').classList.add('class="alert')
+				document.getElementById('error').classList.add('alert-danger')
+				return false
+			}
+			if (lane == 'top') {
 				players.tops.push(playerName)
-			}else if(lane == 'selva'){
+			} else if (lane == 'selva') {
 				players.junglers.push(playerName)
-			}else if(lane == 'mid'){
+			} else if (lane == 'mid') {
 				players.middles.push(playerName)
-			}else if(lane == 'suporte'){
+			} else if (lane == 'suporte') {
 				players.sups.push(playerName)
-			}else{
+			} else {
 				players.adcs.push(playerName)
 			}
-			
-			gerar('list-'+lane, playerName)
+
+			gerar('list-' + lane, playerName)
 			document.getElementById(lane).value = ''
-			
+
 		}
-		function gerar(lista, player){
+		function gerar(lista, player) {
 			listaUl = document.getElementById(lista)
 			let item = document.createElement('li');
-        	item.appendChild(document.createTextNode(player));
-        	listaUl.appendChild(item);
-        	console.log(players)
+			item.classList.add('list-group-item');
+			item.appendChild(document.createTextNode(player));
+			listaUl.appendChild(item);
+			console.log(players)
 		}
 
-		function sortTeams(){
+		function sortTeams() {
 			console.log('Entrou em sortTeams')
 			let erro = false
 			qtdTeams = document.getElementById('qtd').value
 			document.getElementById('error').innerHTML = ''
+			document.getElementById('error').classList.remove('class="alert')
+			document.getElementById('error').classList.remove('alert-danger')
 			document.getElementById('times-div').innerHTML = ''
-			if(qtdTeams <= 0){
+			if (qtdTeams <= 0) {
 				document.getElementById('error').innerHTML = 'Ô Jumento, você tem que querer montar pelo menos 1 time né!?'
+				document.getElementById('error').classList.add('class="alert')
+				document.getElementById('error').classList.add('alert-danger')
 				erro = true
 				return false
 			}
-			if(!erro){
+			if (!erro) {
 				Object.keys(players).forEach((key) => {
 					console.log('Entrou no foreach para o elemento:' + key + ' quantidade de players: ' + players[key].length)
-					if(players[key].length < qtdTeams){
+					if (players[key].length < qtdTeams) {
 						document.getElementById('error').innerHTML = 'Deixa de ser BURRO! se você quer ' + qtdTeams + ' time(s), então deve ter pelo menos ' + qtdTeams + ' players em cada rota.'
+						document.getElementById('error').classList.add('class="alert')
+						document.getElementById('error').classList.add('alert-danger')
 						erro = true
 						return false
 					}
 					shuffle(players[key])
-					for (let i = 0; i < qtdTeams; i++) {					
-						if(Array.isArray(teams[i])){
-							
-						}else{
-							teams[i] = []						
+					for (let i = 0; i < qtdTeams; i++) {
+						if (Array.isArray(teams[i])) {
+
+						} else {
+							teams[i] = []
 						}
 
-						if(key == 'tops'){
+						if (key == 'tops') {
 							teams[i].top = players[key][i]
-						}else if(key == 'junglers'){
+						} else if (key == 'junglers') {
 							teams[i].jungler = players[key][i]
-						}else if(key == 'middles'){
+						} else if (key == 'middles') {
 							teams[i].mid = players[key][i]
-						}else if(key == 'sups'){
+						} else if (key == 'sups') {
 							teams[i].sup = players[key][i]
-						}else{
+						} else {
 							teams[i].adc = players[key][i]
 						}
-						
+
 					}
 				})
 			}
-			if(!erro){
+			if (!erro) {
 				console.log(teams)
 				showTeams()
 			}
 
 		}
-		function showTeams(){
+
+
+		function showTeams() {
 			contagem = 1
 			teams.forEach((time) => {
 				times = document.getElementById('times-div')
-				let item = document.createElement('div');				
-				item.innerHTML = '<h1>Time ' + contagem + '</h1>'
+				let col = document.createElement('div');
+				col.classList.add('col');
+				let card = document.createElement('div');
+				card.classList.add('card');
+				card.classList.add('text-center');
+				let cardBody = document.createElement('div');
+				cardBody.classList.add('card-body');
+				cardBody.innerHTML = '<h5 class="card-title">Time ' + contagem + '</h5>'
 				let lista = document.createElement('ul')
-				item.appendChild(lista)
-				Object.keys(time).forEach((player) => {		
-					let itemList = document.createElement('li')			
+				lista.classList.add('list-group')
+				lista.classList.add('list-group-flush')
+				col.appendChild(card);
+				card.appendChild(cardBody);
+				cardBody.appendChild(lista)
+				Object.keys(time).forEach((player) => {
+					let itemList = document.createElement('li')
+					itemList.classList.add('list-group-item')
 					let laneName = ''
-					if(player == 'top'){
+					if (player == 'top') {
 						laneName = ' TOPO: '
-					}else if(player == 'jungler'){
+					} else if (player == 'jungler') {
 						laneName = ' SELVA: '
-					}else if(player == 'mid'){
+					} else if (player == 'mid') {
 						laneName = ' MEIO: '
-					}else if(player == 'sup'){
+					} else if (player == 'sup') {
 						laneName = ' SUPORTE: '
-					}else{
+					} else {
 						laneName = ' ATIRADOR: '
 					}
-					itemList.appendChild(document.createTextNode(laneName + time[player]));
+					itemList.appendChild(document.createTextNode(time[player]));
 					lista.appendChild(itemList);
-				})	        	
-	        	times.appendChild(item);
-	        	contagem++
+				})
+				times.appendChild(col);
+				contagem++
 			})
 		}
 
 		function shuffle(array) {
-		  var currentIndex = array.length,  randomIndex;
+			var currentIndex = array.length, randomIndex;
 
-		  // While there remain elements to shuffle...
-		  while (0 !== currentIndex) {
+			// While there remain elements to shuffle...
+			while (0 !== currentIndex) {
 
-		    // Pick a remaining element...
-		    randomIndex = Math.floor(Math.random() * currentIndex);
-		    currentIndex--;
+				// Pick a remaining element...
+				randomIndex = Math.floor(Math.random() * currentIndex);
+				currentIndex--;
 
-		    // And swap it with the current element.
-		    [array[currentIndex], array[randomIndex]] = [
-		      array[randomIndex], array[currentIndex]];
-		  }
+				// And swap it with the current element.
+				[array[currentIndex], array[randomIndex]] = [
+					array[randomIndex], array[currentIndex]];
+			}
 
-		  return array;
+			return array;
 		}
 	</script>
-	</body>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+		integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+		crossorigin="anonymous"></script>
+</body>
+
 </html>
